@@ -1,0 +1,38 @@
+package com.user.microservice.adapters.driving.http.controller;
+
+import com.user.microservice.adapters.driving.http.dto.request.AuthenticationRequest;
+import com.user.microservice.adapters.driving.http.dto.response.AuthenticationResponse;
+import com.user.microservice.domain.api.IAuthenticationServicePort;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/auth")
+@RequiredArgsConstructor
+public class AuthenticationRestControllerAdapter {
+
+    private final IAuthenticationServicePort authenticationServicePort;
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody AuthenticationRequest authenticationRequest
+    ) {
+
+        AuthenticationResponse jwtDto = authenticationServicePort.login(authenticationRequest);
+
+        return ResponseEntity.ok(jwtDto);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(
+            @RequestBody AuthenticationRequest authenticationRequest
+    ) {
+
+        return  ResponseEntity.ok("jwtDto");
+    }
+
+}

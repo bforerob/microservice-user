@@ -1,20 +1,19 @@
 package com.user.microservice.domain.model;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class User {
 
-    private final Long id;
-    private final String name;
-    private final String lastName;
-    private final String documentId;
-    private final String phoneNumber;
-    private final LocalDate birthDate;
-    private final String email;
-    private final String encryptedPassword;
-    private Integer role;
+    Long id;
+    String name;
+    String lastName;
+    String documentId;
+    String phoneNumber;
+    Date birthDate;
+    String email;
+    String password;
 
-    public User(Long id, String name, String lastName, String documentId, String phoneNumber, LocalDate birthDate, String email, String encryptedPassword, Integer role) {
+    public User(Long id, String name, String lastName, String documentId, String phoneNumber, Date birthDate, String email, String password) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -22,8 +21,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
         this.email = email;
-        this.encryptedPassword = encryptedPassword;
-        this.role = role;
+        this.password = password;
     }
 
     public Long getId() {
@@ -46,7 +44,7 @@ public class User {
         return phoneNumber;
     }
 
-    public LocalDate getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
@@ -54,16 +52,7 @@ public class User {
         return email;
     }
 
-    public String getEncryptedPassword() {
-        return encryptedPassword;
+    public String getPassword() {
+        return password;
     }
-
-    public Integer getRole() {
-        return role;
-    }
-
-    public void setRole(Integer role) {
-        this.role = role;
-    }
-
 }
