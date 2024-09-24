@@ -2,10 +2,12 @@ package com.user.microservice.configuration.security;
 
 
 
+import com.user.microservice.adapters.driven.jpa.mysql.adapter.AuthenticationAdapter;
 import com.user.microservice.adapters.driven.jpa.mysql.repository.IUserRepository;
 import com.user.microservice.configuration.security.jwtconfiguration.JwtService;
 import com.user.microservice.domain.api.IAuthenticationServicePort;
 import com.user.microservice.domain.api.useCase.AuthenticationUseCase;
+import com.user.microservice.domain.spi.IAuthenticationPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +28,13 @@ public class SecurityBeansConfig {
     private final JwtService jwtService;
 
     @Bean
+    public IAuthenticationPersistencePort authenticationPersistencePort(AuthenticationManager authenticationManager) {
+        return new AuthenticationAdapter(authenticationManager, userRepository, jwtService);
+    }
+
+    @Bean
     public IAuthenticationServicePort authenticationServicePort(AuthenticationManager authenticationManager) {
-        return new AuthenticationUseCase(authenticationManager, userRepository, jwtService);
+        return new AuthenticationUseCase(authenticationPersistencePort(authenticationManager));
     }
 
     @Bean

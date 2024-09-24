@@ -1,6 +1,9 @@
 package com.user.microservice.domain.spi;
 
-import com.user.microservice.domain.model.User;
+import com.user.microservice.adapters.driving.http.dto.request.AuthenticationRequest;
+import com.user.microservice.adapters.driving.http.dto.response.AuthenticationResponse;
 
 public interface IAuthenticationPersistencePort {
+    AuthenticationResponse login(AuthenticationRequest authenticationRequest);
+
 }

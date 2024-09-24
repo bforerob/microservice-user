@@ -1,55 +1,26 @@
 package com.user.microservice.domain.api.useCase;
 
-import com.user.microservice.adapters.driven.jpa.mysql.entity.UserEntity;
-import com.user.microservice.adapters.driven.jpa.mysql.repository.IUserRepository;
+
 import com.user.microservice.adapters.driving.http.dto.request.AuthenticationRequest;
 import com.user.microservice.adapters.driving.http.dto.response.AuthenticationResponse;
-import com.user.microservice.configuration.security.jwtconfiguration.JwtService;
 import com.user.microservice.domain.api.IAuthenticationServicePort;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import com.user.microservice.domain.spi.IAuthenticationPersistencePort;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class AuthenticationUseCase implements IAuthenticationServicePort {
 
-    private final AuthenticationManager authenticationManager;
-    private final IUserRepository iUserRepository;
-    private final JwtService jwtService;
+    private final IAuthenticationPersistencePort authenticationPersistencePort;
 
-    public AuthenticationUseCase(AuthenticationManager authenticationManager, IUserRepository iUserRepository, JwtService jwtService) {
-        this.authenticationManager = authenticationManager;
-        this.iUserRepository = iUserRepository;
-        this.jwtService = jwtService;
+    public AuthenticationUseCase(IAuthenticationPersistencePort authenticationPersistencePort) {
+        this.authenticationPersistencePort = authenticationPersistencePort;
     }
 
 
     @Override
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
 
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(),
-                        authenticationRequest.getPassword()
-                )
-        );
-
-        UserEntity user = iUserRepository.findByEmail(authenticationRequest.getEmail()).get();
-        String jwt = jwtService.generateToken(generateExtraClaims(user), user);
-        return new AuthenticationResponse(jwt);
-    }
-
-    private Map<String, Object> generateExtraClaims(UserEntity user) {
-
-        Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("email", user.getEmail());
-        extraClaims.put("role", user.getRole().name());
-        extraClaims.put("permissions", user.getAuthorities());
-
-
-        return extraClaims;
+        return authenticationPersistencePort.login(authenticationRequest);
 
     }
+
 }
