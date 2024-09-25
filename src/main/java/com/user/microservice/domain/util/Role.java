@@ -5,7 +5,7 @@ import java.util.List;
 public enum Role {
 
     ADMIN(List.of(Permission.REGISTER_AUX)),
-    AUX(List.of());
+    AUX_BODEGA(List.of());
 
     private List<Permission> permissions;
 

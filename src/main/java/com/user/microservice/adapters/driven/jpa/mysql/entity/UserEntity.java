@@ -7,7 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,8 +21,9 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class UserEntity implements UserDetails {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "name", nullable = false)
@@ -29,6 +32,10 @@ public class UserEntity implements UserDetails {
     private String lastName;
     @Column(name = "document_Id", nullable = false)
     private String documentId;
+    @Column(name = "phone_Number", nullable = false)
+    String phoneNumber;
+    @Column(name = "birth_Date", nullable = false)
+    LocalDate birthDate;
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "email", nullable = false)
