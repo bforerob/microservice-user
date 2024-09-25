@@ -55,6 +55,11 @@ public class AuthenticationAdapter implements IAuthenticationPersistencePort {
 
     }
 
+    @Override
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     private Map<String, Object> generateExtraClaims(UserEntity user) {
 
         Map<String, Object> extraClaims = new HashMap<>();

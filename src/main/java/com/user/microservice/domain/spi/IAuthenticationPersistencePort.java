@@ -8,4 +8,6 @@ public interface IAuthenticationPersistencePort {
     AuthenticationResponse login(AuthenticationRequest authenticationRequest);
 
     User register(User user);
+
+    Boolean existsByEmail(String email);
 }
