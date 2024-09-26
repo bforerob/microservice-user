@@ -8,6 +8,8 @@ import com.user.microservice.adapters.driving.http.mapper.request.IRegisterUserR
 import com.user.microservice.adapters.driving.http.mapper.response.IRegisterUserResponseMapper;
 import com.user.microservice.domain.api.IAuthenticationServicePort;
 import com.user.microservice.domain.model.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

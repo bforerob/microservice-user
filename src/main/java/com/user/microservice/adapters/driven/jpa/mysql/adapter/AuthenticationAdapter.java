@@ -10,6 +10,7 @@ import com.user.microservice.domain.model.User;
 import com.user.microservice.domain.spi.IAuthenticationPersistencePort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +22,16 @@ public class AuthenticationAdapter implements IAuthenticationPersistencePort {
     private final IUserRepository userRepository;
     private final JwtService jwtService;
     private final IUserEntityMapper userEntityMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
-    public AuthenticationAdapter(AuthenticationManager authenticationManager, IUserRepository iUserRepository, JwtService jwtService, IUserEntityMapper userEntityMapper) {
+
+    public AuthenticationAdapter(AuthenticationManager authenticationManager, IUserRepository iUserRepository, JwtService jwtService, IUserEntityMapper userEntityMapper, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.userRepository = iUserRepository;
         this.jwtService = jwtService;
         this.userEntityMapper = userEntityMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -49,7 +53,7 @@ public class AuthenticationAdapter implements IAuthenticationPersistencePort {
 
     @Override
     public User register(User user) {
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         UserEntity savedUser = userRepository.save(userEntityMapper.userToUserEntity(user));
         return userEntityMapper.userEntityToUser(savedUser);
 

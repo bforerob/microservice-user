@@ -42,9 +42,7 @@ public class User {
         this.password = Objects.requireNonNull(password, () -> {
             throw new NullFieldException(DomainConstants.Field.PASSWORD.toString());
         });
-        this.role = Objects.requireNonNull(role, () -> {
-            throw new NullFieldException(DomainConstants.Field.ROLE.toString());
-        });
+        this.role = role;
     }
 
     public Long getId() {

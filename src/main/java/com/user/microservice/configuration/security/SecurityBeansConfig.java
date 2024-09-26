@@ -31,12 +31,12 @@ public class SecurityBeansConfig {
 
     @Bean
     public IAuthenticationPersistencePort authenticationPersistencePort(AuthenticationManager authenticationManager) {
-        return new AuthenticationAdapter(authenticationManager, userRepository, jwtService, userEntityMapper);
+        return new AuthenticationAdapter(authenticationManager, userRepository, jwtService, userEntityMapper, passwordEncoder());
     }
 
     @Bean
     public IAuthenticationServicePort authenticationServicePort(AuthenticationManager authenticationManager) {
-        return new AuthenticationUseCase(authenticationPersistencePort(authenticationManager), passwordEncoder());
+        return new AuthenticationUseCase(authenticationPersistencePort(authenticationManager));
     }
 
     @Bean

@@ -8,7 +8,6 @@ import com.user.microservice.domain.exception.*;
 import com.user.microservice.domain.model.User;
 import com.user.microservice.domain.spi.IAuthenticationPersistencePort;
 import com.user.microservice.domain.util.Role;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -21,11 +20,9 @@ import static com.user.microservice.domain.util.DomainConstants.*;
 public class AuthenticationUseCase implements IAuthenticationServicePort {
 
     private final IAuthenticationPersistencePort authenticationPersistencePort;
-    private final PasswordEncoder passwordEncoder;
 
-    public AuthenticationUseCase(IAuthenticationPersistencePort authenticationPersistencePort, PasswordEncoder passwordEncoder) {
+    public AuthenticationUseCase(IAuthenticationPersistencePort authenticationPersistencePort) {
         this.authenticationPersistencePort = authenticationPersistencePort;
-        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -45,8 +42,7 @@ public class AuthenticationUseCase implements IAuthenticationServicePort {
                 Field.DOCUMENT_ID.toString(), user.getDocumentId(),
                 Field.PHONE_NUMBER.toString(), user.getPhoneNumber(),
                 Field.EMAIL.toString(), user.getEmail(),
-                Field.PASSWORD.toString(), user.getPassword(),
-                Field.ROLE.toString(), user.getRole().name()
+                Field.PASSWORD.toString(), user.getPassword()
         );
 
         fields.forEach((field, value) -> {
@@ -78,7 +74,6 @@ public class AuthenticationUseCase implements IAuthenticationServicePort {
 
 
         user.setRole(Role.AUX_BODEGA);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return authenticationPersistencePort.register(user);
 
     }
