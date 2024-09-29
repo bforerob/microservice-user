@@ -4,7 +4,7 @@ import java.util.List;
 
 public enum Role {
 
-    ADMIN(List.of(Permission.REGISTER_AUX)),
+    ADMIN(List.of(Permission.REGISTER_AUX, Permission.ADD_CATEGORY, Permission.ADD_BRAND, Permission.ADD_ARTICLE)),
     AUX_BODEGA(List.of());
 
     private List<Permission> permissions;

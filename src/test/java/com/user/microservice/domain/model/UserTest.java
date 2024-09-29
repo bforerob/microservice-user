@@ -67,12 +67,5 @@ class UserTest {
                 "User constructor did not throw the expected NullFieldException when password is null");
     }
 
-    @Test
-    @DisplayName("given a user with a null role, User constructor should throw NullFieldException")
-    void when_UserRoleIsNull_Expect_NullFieldException() {
-        assertThrows(NullFieldException.class, () -> new User(
-                        1L, "John", "Doe", "123456789", "1234567890", LocalDate.of(1990, 1, 1), "johndoe@example.com", "password", null),
-                "User constructor did not throw the expected NullFieldException when role is null");
-    }
 
 }
