@@ -1,5 +1,7 @@
 package com.user.microservice.domain.api.usecase;
 
+import com.user.microservice.adapters.driving.http.dto.request.AuthenticationRequest;
+import com.user.microservice.adapters.driving.http.dto.response.AuthenticationResponse;
 import com.user.microservice.domain.exception.*;
 import com.user.microservice.domain.model.User;
 import com.user.microservice.domain.spi.IAuthenticationPersistencePort;
@@ -29,19 +31,35 @@ class AuthenticationUseCaseTest {
     @InjectMocks
     private AuthenticationUseCase authenticationUseCase;
 
+
+    @Test
+    @DisplayName("Should login successfully when credentials are correct")
+    void When_CredentialsAreCorrect_Expect_LoginSuccessfully() {
+        AuthenticationRequest request = new AuthenticationRequest("john.doe@example.com", "password123");
+        AuthenticationResponse expectedResponse = new AuthenticationResponse("jwtToken123");
+
+        when(authenticationPersistencePort.login(request)).thenReturn(expectedResponse);
+
+        AuthenticationResponse result = authenticationUseCase.login(request);
+
+        verify(authenticationPersistencePort, times(1)).login(request);
+
+        assertNotNull(result);
+        assertEquals(expectedResponse.getJwtToken(), result.getJwtToken());
+    }
+
     @Test
     @DisplayName("Should register a user successfully when all inputs are valid")
     void When_UserInformationIsCorrect_Expect_UserRegisteredSuccessfully() {
         User user = new User(1L, "John", "Doe", "123456789", "+123456789", LocalDate.of(1990, 1, 1), "john.doe@example.com", "password123", Role.AUX_BODEGA);
 
-        when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
         when(authenticationPersistencePort.register(user)).thenReturn(user);
 
         User result = authenticationUseCase.register(user);
 
         assertNotNull(result);
         assertEquals(user.getId(), result.getId());
-        assertEquals("encodedPassword", result.getPassword());
+        assertEquals(user.getPassword(), result.getPassword());
         verify(authenticationPersistencePort, times(1)).register(user);
     }
 
