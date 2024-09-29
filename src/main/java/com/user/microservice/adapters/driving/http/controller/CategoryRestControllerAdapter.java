@@ -2,7 +2,7 @@ package com.user.microservice.adapters.driving.http.controller;
 
 import com.user.microservice.adapters.driving.http.dto.request.AddCategoryRequest;
 import com.user.microservice.adapters.driving.http.dto.response.CategoryResponse;
-import com.user.microservice.configuration.feignclient.CategoryService;
+import com.user.microservice.configuration.feignclient.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class CategoryRestControllerAdapter {
 
     @PostMapping("/")
     public ResponseEntity<CategoryResponse> addCategory(@RequestBody AddCategoryRequest request) {
-        CategoryResponse categoryResponse = categoryService.addCategoryToStock(request);
+        CategoryResponse categoryResponse = categoryService.addCategory(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryResponse);
     }
 

@@ -8,6 +8,7 @@ public class DomainConstants {
 
     public enum Field{
         NAME,
+        DESCRIPTION,
         LAST_NAME,
         DOCUMENT_ID,
         PHONE_NUMBER,
