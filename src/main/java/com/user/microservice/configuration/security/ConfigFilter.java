@@ -33,6 +33,7 @@ public class ConfigFilter {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequests ->{
                     authorizeRequests.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
+                    authorizeRequests.requestMatchers(HttpMethod.POST, "/category/").permitAll();
                     authorizeRequests.requestMatchers(HttpMethod.POST, "/auth/registerAux").hasAuthority(Permission.REGISTER_AUX.name())
                             .anyRequest().authenticated();
 
