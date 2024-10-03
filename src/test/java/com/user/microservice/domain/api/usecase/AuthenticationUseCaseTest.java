@@ -55,7 +55,7 @@ class AuthenticationUseCaseTest {
 
         when(authenticationPersistencePort.register(user)).thenReturn(user);
 
-        User result = authenticationUseCase.register(user);
+        User result = authenticationUseCase.register(user, Role.AUX_BODEGA);
 
         assertNotNull(result);
         assertEquals(user.getId(), result.getId());
@@ -68,7 +68,7 @@ class AuthenticationUseCaseTest {
     void Expect_EmptyFieldException_When_UserNameIsEmpty() {
         User user = new User(1L, "", "Doe", "123456789", "+123456789", LocalDate.of(1990, 1, 1), "john.doe@example.com", "password123", Role.AUX_BODEGA);
 
-        assertThrows(EmptyFieldException.class, () -> authenticationUseCase.register(user),
+        assertThrows(EmptyFieldException.class, () -> authenticationUseCase.register(user, Role.AUX_BODEGA),
                 "register did not throw the expected EmptyFieldException when name is empty");
     }
 
@@ -77,7 +77,7 @@ class AuthenticationUseCaseTest {
     void Expect_InvalidEmailFormatException_When_EmailFormatIsInvalid() {
         User user = new User(1L, "John", "Doe", "123456789", "+123456789", LocalDate.of(1990, 1, 1), "invalid-email", "password123", Role.AUX_BODEGA);
 
-        assertThrows(InvalidEmailFormatException.class, () -> authenticationUseCase.register(user),
+        assertThrows(InvalidEmailFormatException.class, () -> authenticationUseCase.register(user, Role.AUX_BODEGA),
                 "register did not throw the expected InvalidEmailFormatException when email format is invalid");
     }
 
@@ -88,7 +88,7 @@ class AuthenticationUseCaseTest {
 
         when(authenticationPersistencePort.existsByEmail(user.getEmail())).thenReturn(true);
 
-        assertThrows(AlreadyExistsException.class, () -> authenticationUseCase.register(user),
+        assertThrows(AlreadyExistsException.class, () -> authenticationUseCase.register(user, Role.AUX_BODEGA),
                 "register did not throw the expected AlreadyExistsException when email already exists");
     }
 
@@ -98,7 +98,7 @@ class AuthenticationUseCaseTest {
         String longPhoneNumber = "+12345678901234";
         User user = new User(1L, "John", "Doe", "123456789", longPhoneNumber, LocalDate.of(1990, 1, 1), "john.doe@example.com", "password123", Role.AUX_BODEGA);
 
-        assertThrows(PhoneLengthException.class, () -> authenticationUseCase.register(user),
+        assertThrows(PhoneLengthException.class, () -> authenticationUseCase.register(user, Role.AUX_BODEGA),
                 "register did not throw the expected PhoneLengthException when phone number exceeds maximum length");
     }
 
@@ -107,7 +107,7 @@ class AuthenticationUseCaseTest {
     void Expect_PhoneFormatException_When_PhoneNumberIsInvalid() {
         User user = new User(1L, "John", "Doe", "123456789", "a123456789", LocalDate.of(1990, 1, 1), "john.doe@example.com", "password123", Role.AUX_BODEGA);
 
-        assertThrows(PhoneFormatException.class, () -> authenticationUseCase.register(user),
+        assertThrows(PhoneFormatException.class, () -> authenticationUseCase.register(user, Role.AUX_BODEGA),
                 "register did not throw the expected PhoneFormatException when phone number format is invalid");
     }
 
@@ -116,7 +116,7 @@ class AuthenticationUseCaseTest {
     void Expect_NonNumericDocumentIdException_When_DocumentIdIsNonNumeric() {
         User user = new User(1L, "John", "Doe", "abc123", "+123456789", LocalDate.of(1990, 1, 1), "john.doe@example.com", "password123", Role.AUX_BODEGA);
 
-        assertThrows(NonNumericDocumentIdException.class, () -> authenticationUseCase.register(user),
+        assertThrows(NonNumericDocumentIdException.class, () -> authenticationUseCase.register(user, Role.AUX_BODEGA),
                 "register did not throw the expected NonNumericDocumentIdException when document ID is not numeric");
     }
 
@@ -125,7 +125,7 @@ class AuthenticationUseCaseTest {
     void Expect_UnderAgeException_When_UserIsUnderAge() {
         User user = new User(1L, "John", "Doe", "123456789", "+123456789", LocalDate.of(2010, 1, 1), "john.doe@example.com", "password123", Role.AUX_BODEGA);
 
-        assertThrows(UnderAgeException.class, () -> authenticationUseCase.register(user),
+        assertThrows(UnderAgeException.class, () -> authenticationUseCase.register(user, Role.AUX_BODEGA),
                 "register did not throw the expected UnderAgeException when user is under legal age");
     }
 }
