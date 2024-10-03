@@ -1,6 +1,5 @@
 package com.user.microservice.adapters.driven.jpa.mysql.adapter;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import com.user.microservice.adapters.driven.jpa.mysql.entity.UserEntity;
@@ -9,13 +8,11 @@ import com.user.microservice.adapters.driven.jpa.mysql.repository.IUserRepositor
 import com.user.microservice.configuration.security.jwtconfiguration.JwtService;
 import com.user.microservice.domain.model.User;
 import com.user.microservice.domain.util.Role;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,20 +45,17 @@ class AuthenticationAdapterTest {
     @Test
     @DisplayName("Given a user, the user should be registered correctly")
     void When_UserIsCorrect_Expect_UserRegisteredSuccessfully() {
-        // Preparar datos de prueba
+
         User user = new User(1L, "John", "Doe", "123456789", "+1234567890", LocalDate.of(2000, 1, 1), "john.doe@example.com", "password123", Role.AUX_BODEGA);
         UserEntity userEntity = new UserEntity(1L, "John", "Doe", "123456789", "+1234567890", LocalDate.of(2000, 1, 1), "john.doe@example.com", "password123", Role.AUX_BODEGA);
 
-        // Mock de los métodos dependientes
         when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
         when(userEntityMapper.userToUserEntity(user)).thenReturn(userEntity);
         when(userRepository.save(userEntity)).thenReturn(userEntity);
         when(userEntityMapper.userEntityToUser(userEntity)).thenReturn(user);
 
-        // Ejecución del método
         User result = authenticationAdapter.register(user);
 
-        // Verificaciones
         assertEquals(result, user, "User was not registered correctly");
         verify(userRepository).save(userEntity);
         verify(userEntityMapper).userEntityToUser(userEntity);
@@ -72,13 +66,10 @@ class AuthenticationAdapterTest {
     void When_EmailExists_Expect_True() {
         String email = "john.doe@example.com";
 
-        // Mock de los métodos dependientes
         when(userRepository.existsByEmail(email)).thenReturn(true);
 
-        // Ejecución del método
         Boolean result = authenticationAdapter.existsByEmail(email);
 
-        // Verificación
         assertTrue(result, "Email should exist");
         verify(userRepository).existsByEmail(email);
     }
