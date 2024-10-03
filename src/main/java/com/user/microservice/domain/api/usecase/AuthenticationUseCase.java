@@ -34,7 +34,7 @@ public class AuthenticationUseCase implements IAuthenticationServicePort {
     }
 
     @Override
-    public User register(User user) {
+    public User register(User user, Role role) {
 
         Map<String, String> fields = Map.of(
                 Field.NAME.toString(), user.getName(),
@@ -73,7 +73,7 @@ public class AuthenticationUseCase implements IAuthenticationServicePort {
         }
 
 
-        user.setRole(Role.AUX_BODEGA);
+        user.setRole(role);
         return authenticationPersistencePort.register(user);
 
     }

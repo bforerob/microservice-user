@@ -36,7 +36,8 @@ public class ConfigFilter {
                     authorizeRequests.requestMatchers(HttpMethod.POST, "/category/").hasAuthority(Permission.ADD_CATEGORY.name());
                     authorizeRequests.requestMatchers(HttpMethod.POST, "/brand/").hasAuthority(Permission.ADD_BRAND.name());
                     authorizeRequests.requestMatchers(HttpMethod.POST, "/article/").hasAuthority(Permission.ADD_ARTICLE.name());
-                    authorizeRequests.requestMatchers(HttpMethod.POST, "/auth/registerAux").hasAuthority(Permission.REGISTER_AUX.name());
+                    authorizeRequests.requestMatchers(HttpMethod.POST, "/auth/register/aux").hasAuthority(Permission.REGISTER_AUX.name());
+                    authorizeRequests.requestMatchers(HttpMethod.POST, "/auth/register/customer").permitAll();
                     authorizeRequests.requestMatchers(HttpMethod.POST, "/supply/").hasAuthority(Permission.ADD_SUPPLY.name())
 
                             .anyRequest().authenticated();
