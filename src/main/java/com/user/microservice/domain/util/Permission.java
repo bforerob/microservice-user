@@ -5,6 +5,7 @@ public enum Permission {
     REGISTER_AUX,
     ADD_CATEGORY,
     ADD_BRAND,
-    ADD_ARTICLE
+    ADD_ARTICLE,
+    ADD_SUPPLY
 
 }
