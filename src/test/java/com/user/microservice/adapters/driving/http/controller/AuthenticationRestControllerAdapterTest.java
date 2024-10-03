@@ -51,15 +51,14 @@ class AuthenticationRestControllerAdapterTest {
     @Test
     @DisplayName("Given a valid register request, should register aux and return RegisterResponse with status OK")
     void When_RegisterRequestIsValid_Expect_ReturnOkStatusAndRegisterResponse() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest("John", "Doe", "123456789", "+1234567890", LocalDate.of(2000, 1, 1), "john.doe@example.com", "password123");
         User user = new User(1L, "John", "Doe", "123456789", "+1234567890", LocalDate.of(2000, 1, 1), "john.doe@example.com", "password123", Role.AUX_BODEGA);
         RegisterResponse registerResponse = new RegisterResponse( "John", "Doe", "123456789", "+1234567890", LocalDate.of(2000, 1, 1), "john.doe@example.com");
 
         when(registerUserRequestMapper.userRequestToUser(any(RegisterRequest.class))).thenReturn(user);
-        when(authenticationServicePort.register(any(User.class))).thenReturn(user);
+        when(authenticationServicePort.register(any(User.class), eq(Role.AUX_BODEGA))).thenReturn(user);
         when(registerUserResponseMapper.userToRegisterResponse(any(User.class))).thenReturn(registerResponse);
 
-        mockMvc.perform(post("/auth/registerAux")
+        mockMvc.perform(post("/auth/register/aux")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"John\",\"lastName\":\"Doe\",\"documentId\":\"123456789\",\"phoneNumber\":\"+1234567890\",\"email\":\"john.doe@example.com\",\"password\":\"password123\",\"birthDate\":\"2000-01-01\"}"))
                 .andExpect(status().isOk())
@@ -68,7 +67,31 @@ class AuthenticationRestControllerAdapterTest {
                 .andExpect(jsonPath("$.email").value("john.doe@example.com"));
 
         verify(registerUserRequestMapper).userRequestToUser(any(RegisterRequest.class));
-        verify(authenticationServicePort).register(any(User.class));
+        verify(authenticationServicePort).register(any(User.class), eq(Role.AUX_BODEGA));
+        verify(registerUserResponseMapper).userToRegisterResponse(any(User.class));
+    }
+
+    @Test
+    @DisplayName("Given a valid register request for customer, should register customer and return RegisterResponse with status OK")
+    void When_RegisterCustomerRequestIsValid_Expect_ReturnOkStatusAndRegisterResponse() throws Exception {
+
+        User user = new User(2L, "Jane", "Doe", "987654321", "+9876543210", LocalDate.of(1995, 5, 15), "jane.doe@example.com", "password123", Role.CUSTOMER);
+        RegisterResponse registerResponse = new RegisterResponse("Jane", "Doe", "987654321", "+9876543210", LocalDate.of(1995, 5, 15), "jane.doe@example.com");
+
+        when(registerUserRequestMapper.userRequestToUser(any(RegisterRequest.class))).thenReturn(user);
+        when(authenticationServicePort.register(any(User.class), eq(Role.CUSTOMER))).thenReturn(user);
+        when(registerUserResponseMapper.userToRegisterResponse(any(User.class))).thenReturn(registerResponse);
+
+        mockMvc.perform(post("/auth/register/customer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Jane\",\"lastName\":\"Doe\",\"documentId\":\"987654321\",\"phoneNumber\":\"+9876543210\",\"email\":\"jane.doe@example.com\",\"password\":\"password123\",\"birthDate\":\"1995-05-15\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Jane"))
+                .andExpect(jsonPath("$.lastName").value("Doe"))
+                .andExpect(jsonPath("$.email").value("jane.doe@example.com"));
+
+        verify(registerUserRequestMapper).userRequestToUser(any(RegisterRequest.class));
+        verify(authenticationServicePort).register(any(User.class), eq(Role.CUSTOMER));
         verify(registerUserResponseMapper).userToRegisterResponse(any(User.class));
     }
 
